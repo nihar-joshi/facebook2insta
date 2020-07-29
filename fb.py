@@ -16,6 +16,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 import pandas as pd
+import csv
 #import legit_sheets as legit
 credentials = '/Users/niharj/miniconda3/bin/chromedriver'
 
@@ -45,26 +46,36 @@ class Instabot:
         browser.get('https://www.facebook.com/')
         sleep(1)
         self.driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div/div/div/div[2]/form/table/tbody/tr[2]/td[1]/input').send_keys(username)
+        sleep(2)
         self.driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div/div/div/div[2]/form/table/tbody/tr[2]/td[2]/input').send_keys(password)
+        sleep(2)
         self.driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div/div/div/div[2]/form/table/tbody/tr[2]/td[3]/label/input').click()
         sleep(2)
         browser.get('https://www.facebook.com/groups/1812699475720343/')
-
+        sleep(2)
         #self.driver.find_element_by_xpath('/html/body/div[1]/div/div/div[1]/div[2]/div[2]/div/div/div[1]/div/div[3]/label/input').click()
         #self.driver.find_element_by_xpath('/html/body/div[1]/div/div/div[1]/div[2]/div[2]/div/div/div[1]/div/div[3]/label/input').send_keys(group_name)
-        sleep(2)
+       
         #self.driver.find_element_by_xpath('/html/body/div[1]/div/div/div[1]/div[2]/div[2]/div/div/div[2]/div/ul/li[1]/div/a/div/div[2]/span').click()
-        sleep(2)
-        #self.driver.find_element_by_xpath('/html/body/div[1]/section/nav/div[2]/div/div/div[2]/div/div/span[2]').click()
-        sleep(1)
-        count = 0
         
+        #self.driver.find_element_by_xpath('/html/body/div[1]/section/nav/div[2]/div/div/div[2]/div/div/span[2]').click()
+        
+        count = 0
+        names = []
+                                                     #/html/body/div[1]/div/div/div[1]/div[3]/div/div/div[1]/div/div[2]/div/div/div[4]/div/div/div/div[1]/div[3]/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div[2]/div/div[2]/div/div[1]/span/h3/span/div/a/strong/span
         # Get scroll height
         last_height = self.driver.execute_script("return document.body.scrollHeight")
-
-        num_scrolls = 1
+        num_scrolls = 3
+        posts = {}
         while count< num_scrolls:
+
+            for i in range (2, 10):
+                try:
+                 posts[i] = self.driver.find_element(By.TAG_NAME,'')
+                except Exception as e:
+                    pass
             # Scroll down to bottom
+            
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
             # Wait to load page
@@ -76,17 +87,30 @@ class Instabot:
                 break
             last_height = new_height
             count+=1
-        images = self.driver.find_elements_by_tag_name('img')
-        filename = 'filename'
-        indexing = 0
-        for image in images:
-            urllib.request.urlretrieve(image.get_attribute('src'),filename+str(indexing)+'.png' )
-            indexing+=1
-            #Down_image=urllib.URLopener()
-            #Down_image.retrieve(image)
-            print(image.get_attribute('src'))
-        for i in range(0, len(images)):
-            urllib.request.urlretrieve(image.get_attribute('src'), "filename + .png")
+            
+            #posts = self.driver.find_element(By.CSS_SELECTOR,'#mount_0_0 > div > div > div.rq0escxv.l9j0dhe7.du4w35lb > div.rq0escxv.l9j0dhe7.du4w35lb > div > div > div.j83agx80.cbu4d94t.d6urw2fd.dp1hu0rb.l9j0dhe7.du4w35lb > div > div.rq0escxv.l9j0dhe7.du4w35lb.j83agx80.cbu4d94t.d2edcug0.rj1gh0hx.buofh1pr.g5gj957u.hpfvmrgz.dp1hu0rb > div > div > div.d2edcug0.cbu4d94t.j83agx80.bp9cbjyn > div > div > div > div.rq0escxv.l9j0dhe7.du4w35lb.qmfd67dx.gile2uim.buofh1pr.g5gj957u.hpfvmrgz.aov4n071.oi9244e8.bi6gxh9e.h676nmdw.aghb5jc5 > div:nth-child(3) > div:nth-child(2) > div > div > div > div > div > div > div > div > div > div:nth-child(2) > div')
+            #name_holder_strong = self.driver.find_elements(By.TAG_NAME, 'strong')
+            #names = name_holder_strong.find_elements(By.TAG_NAME, 'span')
+        
+        #/div/div/div/div/div/div/div/div/div/div[2]/div/div[2]/div/div[2]/div/div[1]/span/h3/span/div/a/strong/span
+        print(len(posts))
+        # with open('name_list.csv' , 'w') as file:
+        #     writer = csv.writer(file)
+        #     for name in names:
+        #         print(name.text)   
+        #         writer.writerows(name.text)
+
+        # images = self.driver.find_elements_by_tag_name('img')
+        # filename = 'filename'
+        # indexing = 0
+        # for image in images:
+        #     urllib.request.urlretrieve(image.get_attribute('src'),filename+str(indexing)+'.png' )
+        #     indexing+=1
+        #     #Down_image=urllib.URLopener()
+        #     #Down_image.retrieve(image)
+        #     print(image.get_attribute('src'))
+        # for i in range(0, len(images)):
+        #     urllib.request.urlretrieve(image.get_attribute('src'), "filename + .png")
 
         
     def go_to_new_link(self, url):
